@@ -6,13 +6,14 @@ import (
 	"context"
 )
 
+//KeyRotationPlan is the instructions to realize a specific rotation strategy against a KeyStore.
 type KeyRotationPlan struct {
 	CreateKey   bool
 	DestroyKeys KeyList
 	goodKeys    KeyList
 }
 
-//Apply performs the desired operations against the a given store.  If successful a KeyList of healthy keys are returned.
+//Apply performs the desired operations against a given store.  If successful a KeyList of healthy keys are returned.
 func (plan *KeyRotationPlan) Apply(ctx context.Context, store KeyStore) (KeyList, error) {
 	knownKeys := plan.goodKeys
 	for _, k := range plan.DestroyKeys {
