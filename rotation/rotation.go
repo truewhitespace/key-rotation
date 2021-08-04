@@ -1,3 +1,5 @@
+//Package rotation provides a set of vendor-agnostic algorithms and utilities for managing key life cycles including
+//creation, maintenance, and retirement.
 package rotation
 
 import (
@@ -7,6 +9,8 @@ import (
 	"time"
 )
 
+//NewKeyRotation instantiates a new key rotation object given the maximum age and grace thresholds provided.  See
+//KeyRotation for additional details.
 func NewKeyRotation(maximumAge time.Duration, graceAge time.Duration) (*KeyRotation, error) {
 	if maximumAge <= graceAge {
 		return nil, fmt.Errorf("maximum age (%d) must be greater than or equal to grace age (%d)", maximumAge, graceAge)
@@ -17,6 +21,11 @@ func NewKeyRotation(maximumAge time.Duration, graceAge time.Duration) (*KeyRotat
 	}, nil
 }
 
+//KeyRotation is an algorithm for planning key rotation given a valid key period, and a grace period.  KeyRotation will
+//attempt to key one key in the active state at all times and destroy any keys exceeding the maximum duration.
+//
+//If a KeyStore has reached a limit with all keys being in the grace period then one grace key will be selected at
+//random to be destroyed.
 type KeyRotation struct {
 	maximumAge time.Duration
 	graceAge   time.Duration
