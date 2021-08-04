@@ -17,10 +17,10 @@ func (r *rotationFlags) attach(f *pflag.FlagSet) {
 	f.DurationVar(&r.expiresAfter, "expires-after", 10*24*time.Hour, "grace period before deletion after validity")
 }
 
-func (r *rotationFlags) build() (*rotation.KeyRotation, error) {
+func (r *rotationFlags) build() (*rotation.GracefulExpiration, error) {
 	grace := r.validFor
 	expiry := r.expiresAfter + r.validFor
-	return rotation.NewKeyRotation(expiry, grace)
+	return rotation.NewGracefulExpiration(expiry, grace)
 }
 
 func NewRoot() *cobra.Command {

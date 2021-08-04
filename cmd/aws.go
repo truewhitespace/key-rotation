@@ -19,7 +19,7 @@ func updateAWSUser(cmd *cobra.Command, args []string, flags *awsFlags, rotationC
 		return err
 	}
 
-	var rotator *rotation.KeyRotation
+	var rotator *rotation.GracefulExpiration
 	if rotator, err = rotationConfig.build(); err != nil {
 		return err
 	}

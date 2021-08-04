@@ -132,7 +132,7 @@ func harnessRunPlan(t *testing.T, given func() KeyStore, expect func(*testing.T,
 	ctx, done := testContext(t)
 	defer done()
 
-	rotation := &KeyRotation{
+	rotation := &GracefulExpiration{
 		maximumAge: 1 * time.Minute,
 		graceAge:   30 * time.Second,
 	}
