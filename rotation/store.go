@@ -40,3 +40,22 @@ type KeyStore interface {
 	//where multiple keys maybe in grace, among others.
 	MaximumKeys() int
 }
+
+//KeyStoreDecorator provides a minimal implementation of KeyStore delegating to the Wrapped keystore.  Intended to be
+//further extended to override specific behaviors of a KeyStore.
+type KeyStoreDecorator struct {
+	Wrapped KeyStore
+}
+
+func (k *KeyStoreDecorator) CreateKey(ctx context.Context) (Key, error) {
+	return k.Wrapped.CreateKey(ctx)
+}
+func (k *KeyStoreDecorator) DeleteKey(ctx context.Context, key Key) error {
+	return k.Wrapped.DeleteKey(ctx, key)
+}
+func (k *KeyStoreDecorator) ListKeys(ctx context.Context) (KeyList, error) {
+	return k.Wrapped.ListKeys(ctx)
+}
+func (k *KeyStoreDecorator) MaximumKeys() int {
+	return k.Wrapped.MaximumKeys()
+}
