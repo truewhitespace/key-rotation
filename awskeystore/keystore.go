@@ -8,6 +8,7 @@ import (
 	"github.com/truewhitespace/key-rotation/rotation"
 )
 
+//NewAWSUserKeyStore initializes a new KeyStore targeting the given user targeting the specific client.
 func NewAWSUserKeyStore(username string, client *iam.IAM) *AWSUserKeyStore {
 	return &AWSUserKeyStore{
 		client:   client,
@@ -15,6 +16,8 @@ func NewAWSUserKeyStore(username string, client *iam.IAM) *AWSUserKeyStore {
 	}
 }
 
+//AWSUserKeyStore is a bridge between AWS and rotation.KeyStore system, translating the calls into the AWS client scoped
+//to a specific user.
 type AWSUserKeyStore struct {
 	client   *iam.IAM
 	username string
