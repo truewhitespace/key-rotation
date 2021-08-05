@@ -25,10 +25,7 @@ func newFakeSourceWithKeys(keys rotation.KeyList) rotation.KeyStore {
 
 func newTestKeyFilter(validKeys []string, keys rotation.KeyList) rotation.KeyStore {
 	source := newFakeSourceWithKeys(keys)
-	return &OnlyValidKeys{
-		KeyStoreDecorator: rotation.KeyStoreDecorator{Wrapped: source},
-		validKeys:         validKeys,
-	}
+	return NewOnlyValidKeys(source, validKeys)
 }
 
 func TestUnknownKeyIsInvalidated(t *testing.T) {

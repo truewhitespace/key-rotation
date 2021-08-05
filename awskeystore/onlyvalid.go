@@ -5,14 +5,23 @@ import (
 	"github.com/truewhitespace/key-rotation/rotation"
 )
 
+//NewOnlyValidKeys creates a new KeyStore only allowing the access key IDs specified in validKeys to be considered
+//current.  All other keys will appear to have been expired regardless of status.
+func NewOnlyValidKeys(backingStore rotation.KeyStore, validKeys StringSlice) rotation.KeyStore {
+	return &onlyValidKeys{
+		KeyStoreDecorator: rotation.KeyStoreDecorator{Wrapped: backingStore},
+		validKeys:         validKeys,
+	}
+}
+
 //OnlyValidKeys is a decorator designed to file AWS access key.  Any keys not within the known set will be invalidated
 //as though the keys are expired.
-type OnlyValidKeys struct {
+type onlyValidKeys struct {
 	rotation.KeyStoreDecorator
 	validKeys StringSlice
 }
 
-func (o *OnlyValidKeys) ListKeys(ctx context.Context) (rotation.KeyList, error) {
+func (o *onlyValidKeys) ListKeys(ctx context.Context) (rotation.KeyList, error) {
 	keys, err := o.Wrapped.ListKeys(ctx)
 	if err != nil {
 		return nil, err
